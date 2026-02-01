@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Veera Kumari - Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  
+  <script>
+    // Handle hash-based navigation
+    window.addEventListener("hashchange", function() {
+      const hash = window.location.hash.substring(1);
+      if (hash) {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    });
+
+    // Handle initial hash on page load
+    window.addEventListener("load", function() {
+      if (window.location.hash) {
+        setTimeout(() => {
+          const hash = window.location.hash.substring(1);
+          const element = document.getElementById(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 100);
+      }
+    });
+
+    // Debug: Log all clicks on nav links
+    document.addEventListener("click", function(e) {
+      if (e.target.matches('a[href^="#"]')) {
+        const href = e.target.getAttribute("href");
+        console.log("Nav link clicked:", href);
+      }
+    });
+  </script></body>
+</html>
+

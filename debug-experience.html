@@ -1,0 +1,50 @@
+﻿<script>
+// Debug script to check Experience section
+console.log("=== DEBUG EXPERIENCE SECTION ===");
+
+// Check after page loads
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    const experience = document.getElementById("experience");
+    console.log("Experience element:", experience);
+    
+    if (experience) {
+      console.log("✅ Experience section FOUND");
+      console.log("Position:", experience.offsetTop);
+      console.log("Text content:", experience.textContent.substring(0, 100));
+      
+      // Make it visible with red border for debugging
+      experience.style.border = "3px solid red";
+      experience.style.padding = "20px";
+    } else {
+      console.log("❌ Experience section NOT FOUND");
+      
+      // List all sections
+      const sections = document.querySelectorAll("section");
+      console.log("Total sections found:", sections.length);
+      sections.forEach((section, i) => {
+        console.log(`Section ${i}:`, section.id || "no id", section.className);
+      });
+    }
+    
+    // Check if Experience link exists
+    const experienceLink = document.querySelector('a[href="#experience"]');
+    console.log("Experience link:", experienceLink);
+    
+    if (experienceLink) {
+      experienceLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        console.log("Experience link clicked!");
+        
+        const expSection = document.getElementById("experience");
+        if (expSection) {
+          console.log("Scrolling to Experience...");
+          expSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+          console.log("Experience section not found for scrolling");
+        }
+      });
+    }
+  }, 1000);
+});
+</script>
