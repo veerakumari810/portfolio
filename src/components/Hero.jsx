@@ -20,7 +20,7 @@ const Hero = () => {
         {/* Content on LEFT */}
         <div className="hero-content">
           <h4>Hi, I'm</h4>
-          <h1><span className="gradient-text">Veera Kumari</span></h1>
+          <h1><span className="gradient-text"> Achanta Veera Kumari</span></h1>
           <h3>AI & Data Science Student | Web Developer</h3>
           
           <p className="hero-description">
