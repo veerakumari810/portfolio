@@ -1,5 +1,4 @@
 ﻿import React, { useState, useEffect } from 'react';
-import emailjs from '@emailjs/browser';
 import './Contact.css';
 
 const Contact = () => {
@@ -9,11 +8,7 @@ const Contact = () => {
     message: ''
   });
   const [isSending, setIsSending] = useState(false);
-
-  // Initialize EmailJS
-  useEffect(() => {
-    emailjs.init('D_pvMJm-am2vl8C3g'); // Your Public Key
-  }, []);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -40,16 +35,18 @@ const Contact = () => {
     const templateParams = {
       from_name: formData.name,
       from_email: formData.email,
-      to_email: 'vkachanta9346@gmail.com',
-      message: formData.message,
+      name: formData.name,
+      email: formData.email,
       reply_to: formData.email,
+      message: formData.message,
       date: new Date().toLocaleString('en-IN', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
+        hour12: true
       })
     };
 
@@ -57,7 +54,8 @@ const Contact = () => {
     emailjs.send(serviceId, templateId, templateParams, publicKey)
       .then((response) => {
         console.log('✅ Email sent successfully!', response.status, response.text);
-        alert(`✅ Thank you ${formData.name}! Your message has been sent successfully. I'll reply to ${formData.email} soon.`);
+        setIsSubmitted(true);
+        setTimeout(() => setIsSubmitted(false), 5000);
         setFormData({
           name: '',
           email: '',
@@ -66,11 +64,7 @@ const Contact = () => {
       })
       .catch((error) => {
         console.error('❌ Failed to send email:', error);
-        let errorMessage = 'Failed to send message. ';
-        if (error.text) {
-          errorMessage += `Error: ${error.text}`;
-        }
-        alert(`❌ ${errorMessage}\n\nAlternatively, you can email me directly at vkachanta9346@gmail.com`);
+        alert(`❌ Failed to send message. Please email me directly at vkachanta9346@gmail.com`);
       })
       .finally(() => {
         setIsSending(false);
@@ -86,104 +80,147 @@ const Contact = () => {
     },
     {
       icon: 'fab fa-github',
-      title: 'Github',
+      title: 'GitHub',
       value: 'github.com/veerakumari810',
-      link: 'https://github.com/veerakumari810'
+      link: 'https://github.com/veerakumari810',
+      color: '#333'
     },
     {
-      icon: 'fab fa-linkedin',
+      icon: 'fab fa-linkedin-in',
       title: 'LinkedIn',
-      value: 'linkedin.com/Veera Kumari Achanta',
-      link: 'https://linkedin.com/Veera Kumari Achanta'
+      value: 'linkedin.com/in/veera-kumari-achanta',
+      link: 'https://linkedin.com/in/veera-kumari-achanta',
+      color: '#0077B5'
+    },
+    {
+      icon: 'fas fa-map-marker-alt',
+      title: 'Location',
+      value: 'Andhra Pradesh, India',
+      link: '#',
+      color: '#FF6B6B'
     }
   ];
 
   return (
-    <section className="contact dark-theme" id="contact">
+    <section className="contact-section" id="contact">
       <div className="container">
-        <h2 className="section-title">Get In <span className="highlight">Touch</span></h2>
-        <p className="section-subtitle">Let's Connect</p>
+        <div className="section-header">
+          <h2 className="section-title">Get In <span className="highlight">Touch</span></h2>
+          <p className="section-subtitle">Let's work together and bring your ideas to life</p>
+          <div className="underline"></div>
+        </div>
         
         <div className="contact-content">
-          <div className="contact-left">
-            <div className="contact-description">
-              <h3>I'm always open to discussing new opportunities, projects, or just having a chat about technology!</h3>
+          {/* Left Side - Contact Information */}
+          <div className="contact-info-section">
+            <div className="contact-intro">
+              <h3>Contact Me</h3>
+              <p className="intro-text">
+                I'm currently looking for new opportunities in AI, Data Science, and Full Stack Development. 
+                Whether you have a question, project idea, or just want to say hello, feel free to reach out!
+              </p>
             </div>
             
-            <div className="contact-info-cards">
+            <div className="contact-details">
               {contactInfo.map((item, index) => (
-                <div className="contact-info-card" key={index}>
-                  <div className="contact-icon">
-                    <i className={item.icon}></i>
+                <a 
+                  href={item.link} 
+                  className="contact-card" 
+                  key={index}
+                  target={item.link !== '#' ? "_blank" : "_self"}
+                  rel="noopener noreferrer"
+                >
+                  <div className="contact-icon" style={{ backgroundColor: item.color ? `${item.color}15` : 'var(--primary-light)' }}>
+                    <i className={item.icon} style={{ color: item.color || 'var(--primary)' }}></i>
                   </div>
-                  <div className="contact-details">
+                  <div className="contact-text">
                     <h4>{item.title}</h4>
-                    <a href={item.link} target="_blank" rel="noopener noreferrer">
-                      {item.value}
-                    </a>
+                    <p>{item.value}</p>
                   </div>
-                </div>
+                  <div className="contact-arrow">
+                    <i className="fas fa-chevron-right"></i>
+                  </div>
+                </a>
               ))}
             </div>
           </div>
           
-          <div className="contact-right">
+          {/* Right Side - Contact Form */}
+          <div className="contact-form-section">
+            <div className="form-header">
+              <h3>Send me a message</h3>
+              <p>Fill out the form below and I'll get back to you as soon as possible</p>
+            </div>
+            
+            {isSubmitted && (
+              <div className="success-message">
+                <i className="fas fa-check-circle"></i>
+                <div>
+                  <h4>Message Sent Successfully!</h4>
+                  <p>Thank you for reaching out. I'll get back to you soon.</p>
+                </div>
+              </div>
+            )}
+            
             <form className="contact-form" onSubmit={handleSubmit}>
-              <h3>Send Message</h3>
-              
-              {/* Name Field */}
-              <div className="form-group">
-                <label htmlFor="name">Your Name *</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  placeholder="Enter your name"
-                  disabled={isSending}
-                />
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="name">
+                    Your Name <span className="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    placeholder="Enter your name"
+                    disabled={isSending}
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="email">
+                    Your Email <span className="required">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    placeholder="Enter your email"
+                    disabled={isSending}
+                  />
+                </div>
               </div>
               
-              {/* Email Field */}
               <div className="form-group">
-                <label htmlFor="email">Your Email *</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  placeholder="Enter your email"
-                  disabled={isSending}
-                />
-              </div>
-              
-              {/* Message Field */}
-              <div className="form-group">
-                <label htmlFor="message">Message *</label>
+                <label htmlFor="message">
+                  Your Message <span className="required">*</span>
+                </label>
                 <textarea
                   id="message"
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  placeholder="Write your message here..."
-                  rows="6"
+                  placeholder="Hi Veera, I'd like to discuss..."
+                  rows="5"
                   disabled={isSending}
                 ></textarea>
               </div>
               
               <button 
                 type="submit" 
-                className="btn btn-primary"
+                className="submit-btn"
                 disabled={isSending}
               >
                 {isSending ? (
                   <>
-                    <i className="fas fa-spinner fa-spin"></i> Sending...
+                    <i className="fas fa-spinner fa-spin"></i> Sending Message...
                   </>
                 ) : (
                   <>
@@ -191,6 +228,10 @@ const Contact = () => {
                   </>
                 )}
               </button>
+              
+              <p className="form-note">
+                <i className="fas fa-info-circle"></i> I typically respond within 24 hours
+              </p>
             </form>
           </div>
         </div>
